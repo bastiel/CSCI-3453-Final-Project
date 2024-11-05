@@ -8,6 +8,7 @@ i = 0
 folder1 = "New Folder"
 folder2 = "Second Folder"
 
+### SYS CALL 1 ###
 # chunk overwrites folders if already existing
 if os.path.exists(folder1):
     shutil.rmtree(folder1)
@@ -16,6 +17,8 @@ if os.path.exists(folder2):
     shutil.rmtree(folder2)
 os.mkdir(folder2)
 
+## SYS CALL 2 ##
+# detects ctrl + c interrupt; deletes created folders and displays message
 def signal_handler(signum, frame):
     print("\n\nDeleting newly created folders....")
     time.sleep(2)
@@ -25,10 +28,14 @@ def signal_handler(signum, frame):
     global done
     done = True
 
+# register interrupt signal
 signal.signal(signal.SIGINT, signal_handler)
 
 folder_list= [folder1, folder2]
 
+
+### SYS CALL 3 AND 4 ###
+# Displays the contents of the current directory and renames them every 2 seconds until interrupt is called
 print("\nCurrent folders in directory: ")
 while not done:
     print(os.listdir('.')) # print current directory
