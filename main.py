@@ -2,6 +2,20 @@ import os
 import signal
 import time
 import shutil
+import pandas as pd
+
+
+
+user_name = ["Tcresswell", "Nvu", "AZadron", "AVanbaelinghem", "Lsoundarya"]
+passwords = ["Password123", "Password124", "Password125", "Password126","Password127"]
+admen = ["1",'2','3', '4','5']
+
+    
+data = {"User Name": user_name, "Passwords":passwords, "Admin Level": admen}
+
+df = pd.DataFrame(data)
+
+print(df)
 
 done = False
 i = 0
