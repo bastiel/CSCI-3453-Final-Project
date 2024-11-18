@@ -138,3 +138,33 @@ def delete_file(user,path):
         print(f"file in {path} deleted.")
     except OSError as e:
         print(f"Error deleting file in {path}: {e}")
+
+def list_dir(path):
+    """
+    This function will list the folders in a directory
+
+    Perameters:
+    path: path to the directory
+
+    return: returns folders in directory
+    """
+    try:
+        contents = os.listdir(path)
+        return contents
+    except FileNotFoundError:
+        return f"{path} not found."
+    except PermissionError:
+        return f"You do not have permission to access {path}"
+
+def move(user, curr_path, next_path):
+    """
+    This function will move a folder from one directory to another directory
+
+    Perameters:
+    user: user trying to do the task
+    curr_path: current path to the folder
+    next_path: path the the location where the file will be
+
+    return: string on if the function was successful
+    """
+    
