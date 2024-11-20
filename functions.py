@@ -92,9 +92,9 @@ def create_folder(path, folder_name):
     except FileExistsError:
         print(f"path not found. {folder_name} not created.")
     except OSError as e:
-        print(f"Expected error in creating a folder: {e}")
+        print(f"Expected error in creating a folder/file: {e}")
 
-def rename_file(user,old, new):
+def rename_file(old, new):
     """
     This function will rename a file using system calls
 
@@ -143,7 +143,8 @@ def list_dir(path):
     """
     try:
         contents = os.listdir(path)
-        return contents
+        print(contents)
+        return
     except FileNotFoundError:
         return f"{path} not found."
     except PermissionError:
@@ -161,6 +162,27 @@ def move(user, curr_path, next_path):
     return: string on if the function was successful
     """
 
+def Create_txt_file(path, name):
+    """
+    This function will create a text file with a folder
+
+    Perameters:
+    path: path to the folder
+    name: txt file name
+
+    return: creates a txt file
+    """
+    file_path = os.path.join(path, name)
+
+    try:
+        os.makedirs(path, exist_ok =True)
+        file = os.open(file_path, os.O_CREAT | os.O_RDWR | os.O_TRUNC)
+        os.close(file)
+        print(f"file {name} successfully created")
+    except FileNotFoundError:
+        print("folder not found")
+    except OSError as e:
+        print(f"Error occured: {e}")
 
 if __name__ == "__main__":
     #sets the permissions for each user
@@ -202,37 +224,59 @@ if __name__ == "__main__":
     while menu:
         
         print(f"welcome {user}",
-              "\n1) create directory",
-              "\n2) View directory",
-              "\n3) View users",
-              "\n4) Done")
+              "\n1) View directory",
+              "\n2) View users",
+              "\n3) Done")
         try:
             
             choose = input("Choose option: ")
 
+
             if choose == "1":
-                
-                os.system("cls")
-                check_permission(user, roles,"create")
-                folder_name = input("What is the name of the folder: ")
-                path_to_folder = path +"\\"+ folder_name
-                create_folder(path_to_folder, folder_name)
-
-            elif choose == "2":
                 #view directory
-                os.system("cls")
-                list_dir(path)
-                print("1) add folder",
-                      "\n2) add file"
-                      "\n3) Rename file",
-                      "\n4) Read file"
-                      "\n5) Done")
-                choose_2 = input("What would you like to do: ")
-                
+                choose_1_menu = True
+                while choose_1_menu:
+                    os.system("cls")
+                    list_dir(path)
+                    print("1) add folder",
+                        "\n2) add file",
+                        "\n3) Rename file",
+                        "\n4) Read file",
+                        "\n5) Delete file",
+                        "\n5) Done")
+                    choose1 = input("What would you like to do: ")
+                    if choose1 == '1':
+                        #add folder
+                        os.system("cls")
+                        check_permission(user, roles,"create")
+                        folder_name = input("What is the name of the folder: ")
+                        path_to_folder = os.path.join(path, folder_name)
+                        create_folder(path_to_folder, folder_name)
+                    
+                    elif choose1 == '2':
+                        #add file
+                        folder_name = input("What folder do you want to add to. Press enter if current folder: ")
 
+                        
+                        if folder_name == "":
+                            check_permission(user, roles, "create")
+                            file_name = input("Name of the file: ") + ".txt"
+                            Create_txt_file(path, file_name)
+                            input("press and key to continue------->")
+                        else:
+                            check_permission(user, roles, "create")
+                            file_name = input("Name of the file: ") + ".txt"
+                            new_path = path+"\\"+folder_name
+                            create_folder(new_path,file_name)
+                            input("press enter to continue-------->")
 
-
-
+                    elif choose1 == '3':
+                        #Rename file
+                        old = input("What file/folder do you want to rename: ")
+                        new = input("What new name for the file/folder: ")
+                        old_path = os.path.join()
+                        rename_file(old,new)
+                        
         except ValueError:
             os.system("cls")
             print(f"{choose} not a valid entry")
