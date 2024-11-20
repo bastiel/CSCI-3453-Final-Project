@@ -256,7 +256,7 @@ if __name__ == "__main__":
 
             if choose == "1":
                 
-                clear_screen
+                clear_screen()
                 check_permission(user, roles,"create")
                 folder_name = input("What is the name of the folder: ")
                 path_to_folder = path +"\\"+ folder_name
@@ -264,7 +264,7 @@ if __name__ == "__main__":
 
             elif choose == "2":
                 #view directory
-                clear_screen
+                clear_screen()
                 list_dir(path)
                 print("1) Add folder",
                       "\n2) Add file"
@@ -275,12 +275,12 @@ if __name__ == "__main__":
                 
             elif choose == "3":
                 # view list of users 
-                clear_screen
+                clear_screen()
                 print("\nList of users on machine:")
 
             elif choose == "4":
                 # done/exit
-                clear_screen
+                clear_screen()
                 print("\n\nExiting file explorer...")
                 time.sleep(2)
                 print("\nGoodbye!!")
@@ -290,7 +290,7 @@ if __name__ == "__main__":
 
 
         except ValueError:
-            clear_screen
+            clear_screen()
             print(f"{choose} not a valid entry")
 
         except PermissionError as pe:
