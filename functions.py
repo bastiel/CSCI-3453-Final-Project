@@ -245,8 +245,8 @@ if __name__ == "__main__":
 
     while menu:
         
-        print(f"welcome {user}",
-              "\n1) create directory",
+        print(f"Welcome {user}",
+              "\n1) Create directory",
               "\n2) View directory",
               "\n3) View users",
               "\n4) Done")
@@ -266,13 +266,20 @@ if __name__ == "__main__":
                 #view directory
                 clear_screen
                 list_dir(path)
-                print("1) add folder",
-                      "\n2) add file"
+                print("1) Add folder",
+                      "\n2) Add file"
                       "\n3) Rename file",
                       "\n4) Read file"
                       "\n5) Done")
                 choose_2 = input("What would you like to do: ")
                 
+            elif choose == "4":
+                # done/exit
+                clear_screen
+                print("\n\nExiting file explorer...")
+                time.sleep(2)
+                print("\nGoodbye!!")
+                exit()
 
 
 
