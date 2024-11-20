@@ -17,21 +17,23 @@ def create_df(usernames, passwords, groups):
 
     return df
 
-def check_permission(user, action):#not needed if doing on vertual machine
+def check_permission(user,actions, action):#not needed if doing on vertual machine
     """
     This function will simulate the permission error used with user and groups
 
     Perameters:
     user: user trying to do something
-    action: the action the user would like to preform
+    action: list of actions the user can do
+    action: what the user is trying to do
 
     return: error raised if they user cant preform the action 
     """
-    permissions = user['permissions']
-    if action not in permissions:
-        raise PermissionError(f"{user['user_name']} does not have permission to do {action}")
+    print(actions)
+    if action not in actions:
+        print(f"{action} not found")
+        raise PermissionError(f"{user} does not have permission to {action}")
     
-def write_to_file(user,path, content):
+def write_to_file(path, content):
     """
     This function will write content to a file useing system calls
 
@@ -43,8 +45,6 @@ def write_to_file(user,path, content):
     """
     #try to find the file to write
     try:
-        #check if the user can write to the file
-        check_permission(user, "write")
         #this will open the file with the path with write and read or append functionality
         file = os.write(path, os.O_WRONLY | os.O_APPEND)
         #actually writes the content to the file
@@ -52,8 +52,6 @@ def write_to_file(user,path, content):
         #close the file
         os.close(file)
         print(f"Writting to {path} was successfull")
-    except PermissionError as pe:
-        print(str(pe))
     except OSError as e:
         print(f"Error in writing to the file: {e}")
 
@@ -75,7 +73,7 @@ def read_file(path):
     except OSError as e:
         print(f"Could not read file in {path}: {e}")
 
-def create_folder(user, path, folder_name):
+def create_folder(path, folder_name):
     """
     This Function will create a folder
 
@@ -89,11 +87,8 @@ def create_folder(user, path, folder_name):
     
     #try to create a folder and if the path doesnt exest it will cause and error
     try:
-        check_permission(user, "create")
-        os.mkdir(path+folder_name)
+        os.mkdir(path)
         print(f"{folder_name} has been created successfully")
-    except PermissionError as pe:
-        print(str(pe))
     except FileExistsError:
         print(f"path not found. {folder_name} not created.")
     except OSError as e:
@@ -112,17 +107,16 @@ def rename_file(user,old, new):
     """
     #try to rename a file and if old file not found it will pull an error
     try:
-        check_permission(user, 'write')
+        
         os.rename(old, new)
         print(f"File renamed from {old} to {new}")
     except FileNotFoundError:
         print(f"{old} file not found")
-    except PermissionError as pe:
-        print(str(pe))
+    
     except OSError as e:
         print(f"Error in renameing file {old}: {e}")
 
-def delete_file(user,path):
+def delete_file(path):
     """
     This function will delete a file using system calls
 
@@ -133,7 +127,6 @@ def delete_file(user,path):
     return: delete a file
     """
     try:
-        check_permission(user, "delete")
         os.remove(path)
         print(f"file in {path} deleted.")
     except OSError as e:
@@ -167,4 +160,87 @@ def move(user, curr_path, next_path):
 
     return: string on if the function was successful
     """
+
+
+if __name__ == "__main__":
+    #sets the permissions for each user
+    user_name = ["Tcresswell", "Nvu", "AZadron", "AVanbaelinghem", "Lsoundarya"]
+    passwords = ["Password123", "Password124", "Password125", "Password126","Password127"]
+    admin = ["1",'2','3', '2','3']
+
+    permissions = {1:"admin,create,rename,write,read,", 2:"rename,write,read",3:"read"}
+
+    comp_df = create_df(user_name,passwords,admin)
+    log_in = True
+    while log_in:
+        try:
+            
+            user = input("Enter user name: ")
+            password = input("Enter password: ")
+
+            user_row = comp_df[comp_df["User Name"] == user]
+        
+            if user_row.empty:
+                raise ValueError("Username or password not found")
+            if user_row['Passwords'].iloc[0] !=password:
+                raise ValueError("Username or password not found")
+            os.system("cls")
+            log_in = False
+        except ValueError as ve:
+            os.system("cls")
+            print(f"Error {ve}")
+        except Exception as e:
+            os.system("cls")
+            print(f"Unexpected error occured {e}")
+
+    #get the group id and the tast the user can do
+    group_id = user_row["Group"].iloc[0]
+    roles = permissions.get(int(group_id)).split(",") #list of all the roles the user can do
+    
+    menu = True
+    path = "C:\\Users\\SPeCS\\OneDrive\\Documents\\OS system call project\\workflow"
+    while menu:
+        
+        print(f"welcome {user}",
+              "\n1) create directory",
+              "\n2) View directory",
+              "\n3) View users",
+              "\n4) Done")
+        try:
+            
+            choose = input("Choose option: ")
+
+            if choose == "1":
+                
+                os.system("cls")
+                check_permission(user, roles,"create")
+                folder_name = input("What is the name of the folder: ")
+                path_to_folder = path +"\\"+ folder_name
+                create_folder(path_to_folder, folder_name)
+
+            elif choose == "2":
+                #view directory
+                os.system("cls")
+                list_dir(path)
+                print("1) add folder",
+                      "\n2) add file"
+                      "\n3) Rename file",
+                      "\n4) Read file"
+                      "\n5) Done")
+                choose_2 = input("What would you like to do: ")
+                
+
+
+
+
+        except ValueError:
+            os.system("cls")
+            print(f"{choose} not a valid entry")
+
+        except PermissionError as pe:
+            print(str(pe))
+
+        
+
+        
     
