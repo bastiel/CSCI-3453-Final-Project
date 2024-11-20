@@ -1,5 +1,19 @@
 import os
-import pandas as pd
+import time
+import shutil
+import signal
+
+try:
+    import pandas as pd
+except ImportError:
+    # Install pandas using os.system
+    os.system("pip install pandas")
+    # Adding a short delay to ensure pandas is installed
+    time.sleep(5)
+    import pandas as pd
+
+print("Pandas has been imported successfully!")
+
 
 def create_df(usernames, passwords, groups):
     """
