@@ -1,5 +1,18 @@
 import os
-import pandas as pd
+import time
+import shutil
+import signal
+
+try:
+    import pandas as pd
+except ImportError:
+    # Install pandas using os.system
+    os.system("pip install pandas")
+    # Adding a short delay to ensure pandas is installed
+    time.sleep(5)
+    import pandas as pd
+
+print("Pandas has been imported successfully!")
 
 def create_df(usernames, passwords, groups):
     """
@@ -170,35 +183,66 @@ if __name__ == "__main__":
 
     permissions = {1:"admin,create,rename,write,read,", 2:"rename,write,read",3:"read"}
 
+
+    def clear_screen(): # uses sys calls to universally clear screen for Windows and Unix-based systems 
+    # nt = windows 
+        os.system('cls' if os.name == 'nt' else 'clear')
+
     comp_df = create_df(user_name,passwords,admin)
     log_in = True
     while log_in:
+
+
+        #### prompts user for credentials
         try:
-            
             user = input("Enter user name: ")
             password = input("Enter password: ")
 
             user_row = comp_df[comp_df["User Name"] == user]
-        
+            
             if user_row.empty:
                 raise ValueError("Username or password not found")
-            if user_row['Passwords'].iloc[0] !=password:
+            if user_row['Passwords'].iloc[0] != password:
                 raise ValueError("Username or password not found")
-            os.system("cls")
+            
+
+            #### clears screen after un/successful login
+            clear_screen()
             log_in = False
         except ValueError as ve:
-            os.system("cls")
-            print(f"Error {ve}")
+            clear_screen()
+            print(f"Error: {ve}")
         except Exception as e:
-            os.system("cls")
-            print(f"Unexpected error occured {e}")
+            clear_screen()
+            print(f"Unexpected error occurred: {e}")
+
 
     #get the group id and the tast the user can do
     group_id = user_row["Group"].iloc[0]
     roles = permissions.get(int(group_id)).split(",") #list of all the roles the user can do
     
     menu = True
-    path = "C:\\Users\\SPeCS\\OneDrive\\Documents\\OS system call project\\workflow"
+
+
+    ####### Universal way of creating and naviating directories #######
+    # Get the user's home directory
+    home_dir = os.path.expanduser('~')
+
+    # Create the workflow directory path
+    workflow_dir = os.path.join(home_dir, 'workflow')
+
+    # Create the workflow directory if it doesn't exist
+    if not os.path.exists(workflow_dir):
+        os.makedirs(workflow_dir)
+
+    # Navigate to the workflow directory
+    os.chdir(workflow_dir)
+    path = workflow_dir
+
+    # Print the current directory to verify the change
+    print(f"Current Directory: {os.getcwd()}")
+    #####################################
+
     while menu:
         
         print(f"welcome {user}",
@@ -212,7 +256,7 @@ if __name__ == "__main__":
 
             if choose == "1":
                 
-                os.system("cls")
+                clear_screen
                 check_permission(user, roles,"create")
                 folder_name = input("What is the name of the folder: ")
                 path_to_folder = path +"\\"+ folder_name
@@ -220,7 +264,7 @@ if __name__ == "__main__":
 
             elif choose == "2":
                 #view directory
-                os.system("cls")
+                clear_screen
                 list_dir(path)
                 print("1) add folder",
                       "\n2) add file"
@@ -234,7 +278,7 @@ if __name__ == "__main__":
 
 
         except ValueError:
-            os.system("cls")
+            clear_screen
             print(f"{choose} not a valid entry")
 
         except PermissionError as pe:
