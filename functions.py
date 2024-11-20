@@ -273,6 +273,11 @@ if __name__ == "__main__":
                       "\n5) Done")
                 choose_2 = input("What would you like to do: ")
                 
+            elif choose == "3":
+                # view list of users 
+                clear_screen
+                print("\nList of users on machine:")
+
             elif choose == "4":
                 # done/exit
                 clear_screen
