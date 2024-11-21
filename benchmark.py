@@ -138,7 +138,7 @@ def time_test(path,path_to_file, num_treads=50):
         thread.start()
 
         get_metrix(start)#periodicly get the metrix for the time test
-        time.sleep(1)#pause to simulate actual thread creation
+        
     
     #join the threads to finish the tasks
     for t in threads:
