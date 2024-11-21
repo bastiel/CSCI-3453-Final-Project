@@ -93,7 +93,7 @@ def get_metrix(start):
     #display the metrix
     print(f"Deration: {duration}\nCPU percentage: {cpu_p}\nMemory precentage: {mem_p.percent}\nNumber of active threads: {thread_c} ")
 
-def time_test(path,path_to_file, num_treads=50, run_time = 15):
+def time_test(path,path_to_file, num_treads=50):
     """
     This function will test the system with handleing 50 threads preforming random file system calls (write, read, create)
 
@@ -101,8 +101,7 @@ def time_test(path,path_to_file, num_treads=50, run_time = 15):
     path: the path to the folder used for file creation
     path_to_file: used for reading and writing to a test file
     num_treads: number of threads to be created- default=50
-    time: The time the threads will be running- default = 15 seconds
-
+    
     return: multiple metrix using psutil
     """
 
