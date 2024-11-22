@@ -122,19 +122,29 @@ def time_test(path, results_file, num_threads=50):
 
     for i in range(num_threads):
         task_choice = random.choice(tasks)
+        function_name = ""
+
         if task_choice == "list":
             thread = threading.Thread(target=list_directory, args=(path,))
+            function_name = "list_directory"
         elif task_choice == "change_dir":
             thread = threading.Thread(target=change_directory, args=(path,))
+            function_name = "change_directory"
         elif task_choice == "create_process":
             thread = threading.Thread(target=create_process)
+            function_name = "create_process"
         elif task_choice == "get_process_info":
             thread = threading.Thread(target=get_process_info)
+            function_name = "get_process_info"
 
         threads.append(thread)
         thread.start()
 
-        write_to_file(results_file, f"At thread {i + 1}:\n")
+        #Log function being called
+        content = f"At thread {i + 1}, function: {function_name}\n"
+        write_to_file(results_file, content)
+
+        #Log metrics
         get_metrics(start, results_file)
 
     for t in threads:
