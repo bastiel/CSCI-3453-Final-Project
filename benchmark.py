@@ -69,12 +69,13 @@ def create_file(path, file):
     except OSError as e:
         print(f"Error: {e}")
 
-def get_metrix(start):
+def get_metrix(start, file):
     """
     This function will grab time, cpu use persentage, memory precentage used, and thread count
 
     perameters:
     start: the time when get_matrix is called
+    file: the file that will hold the results
 
     return: will print the matrix listed above
 
@@ -91,15 +92,17 @@ def get_metrix(start):
     thread_c = threading.active_count()
 
     #display the metrix
-    print(f"Deration: {duration}\nCPU percentage: {cpu_p}\nMemory precentage: {mem_p.percent}\nNumber of active threads: {thread_c} ")
+    content = f"Deration: {duration}\nCPU percentage: {cpu_p}\nMemory percentage: {mem_p.percent}\nNumber of active threads: {thread_c} \n\n"
+    write_to_file(file, content)
 
-def time_test(path,path_to_file, num_treads=50):
+def time_test(path,path_to_file,file, num_treads=50):
     """
     This function will test the system with handleing 50 threads preforming random file system calls (write, read, create)
 
     Perameter:
     path: the path to the folder used for file creation
     path_to_file: used for reading and writing to a test file
+    file: The file that will be used to output the results of the test
     num_treads: number of threads to be created- default=50
     
     return: multiple metrix using psutil
@@ -108,7 +111,9 @@ def time_test(path,path_to_file, num_treads=50):
     tasks = ["write", "read", "create"] #the diffrent tasks the treads can do
     threads = [] #hold all the treads
     start = time.time()
-    get_metrix(start)
+    content = "Base line metrix:\n"
+    write_to_file(file, content)
+    get_metrix(start,file)
     
     for i in range(num_treads): #create num_treads(default = 50) of treads
         #randomly choose a task to do and choose a random file to do it on
@@ -136,23 +141,24 @@ def time_test(path,path_to_file, num_treads=50):
                 
         threads.append(thread)
         thread.start()
-
-        get_metrix(start)#periodicly get the metrix for the time test
+        content = f"At thread {i+1}: \n"
+        write_to_file(file,content)
+        get_metrix(start, file)#periodicly get the metrix for the time test
         
     
     #join the threads to finish the tasks
     for t in threads:
         t.join()
         
-    print("The time test is complete")
-    get_metrix(start)     
+    content = "The time test is complete\n"
+    get_metrix(start,file)     
 
 if __name__ == "__main__":
     path = "C:\\Users\\SPeCS\\OneDrive\Documents\\OS system call project\\benchmark test"
     path_to_file = "C:\\Users\\SPeCS\\OneDrive\\Documents\\OS system call project\\benchmark test\\benchmark_test.txt"
-
+    path_results = "C:\\Users\\SPeCS\\OneDrive\\Documents\\OS system call project\\benchmark test\\aResult_time.txt"
     ##RUN TIMED TEST FOR 50 THREADS##
-    time_test(path,path_to_file)
+    time_test(path,path_to_file, path_results)
             
 
 
