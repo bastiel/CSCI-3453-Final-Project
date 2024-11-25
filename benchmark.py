@@ -1,8 +1,25 @@
 import threading
 import time
 import os
-import psutil
 import random
+
+first_install = False
+
+try:
+    import psutil
+except ImportError:
+    # Install psutil using pip
+    print("psutil not found, installing...")
+    os.system("pip install psutil")
+    # Wait a moment to ensure the installation completes
+    time.sleep(5)
+    # Try importing psutil again
+    import psutil
+    first_install = True
+
+if first_install:
+    print("psutil has been imported successfully!")
+
 
 ##FUNCTIONS FOR SYSTEM CALLS##
 def write_to_file(path, content):
