@@ -2,6 +2,7 @@ import threading
 import time
 import os
 import random
+import shutil
 
 first_install = False
 
@@ -194,9 +195,14 @@ if __name__ == "__main__":
     # Path to the folder that will be used to create files
     path = "./stress test"
     
-    # Ensure the directory exists
-    if not os.path.exists(path):
-        os.makedirs(path)
+    # delete folder if it existed from last exe
+    if os.path.exists(path):
+        shutil.rmtree(path)
+        print("Previous stress test detected. Creating new folder now...")
+        time.sleep(2)
+
+    #create fresh folder    
+    os.makedirs(path)
 
     # Path to the file that will be read and written to 
     path_to_file = os.path.join(path, "astress.txt") 
@@ -209,3 +215,5 @@ if __name__ == "__main__":
         with open(result_file, 'w') as file: pass # Just create an empty file
 
     stress_test(path, path_to_file,result_file)
+
+   
