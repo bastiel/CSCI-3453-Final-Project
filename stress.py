@@ -190,12 +190,22 @@ def stress_test(path, path_to_file,file, start_thread = 5):
     get_metrix(start,file)
     
 
-
 if __name__ == "__main__":
-    #path to the folder that will be used to create files
-    path = "C:\\Users\\SPeCS\\OneDrive\Documents\\OS system call project\\stress test"
-    #path to the file that will be read and writen to
-    path_to_file ="C:\\Users\\SPeCS\\OneDrive\\Documents\\OS system call project\\stress test\\astress.txt"
+    # Path to the folder that will be used to create files
+    path = "./stress test"
+    
+    # Ensure the directory exists
+    if not os.path.exists(path):
+        os.makedirs(path)
 
-    result_file = "C:\\Users\\SPeCS\\OneDrive\\Documents\\OS system call project\\stress test\\aResults.txt"
+    # Path to the file that will be read and written to 
+    path_to_file = os.path.join(path, "astress.txt") 
+    if not os.path.exists(path_to_file): 
+        with open(path_to_file, 'w') as file: pass # Just create an empty file 
+    
+    # Path to the result file 
+    result_file = os.path.join(path, "aResults.txt") 
+    if not os.path.exists(result_file): 
+        with open(result_file, 'w') as file: pass # Just create an empty file
+
     stress_test(path, path_to_file,result_file)
