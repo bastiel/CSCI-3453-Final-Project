@@ -193,6 +193,7 @@ def stress_test(path, path_to_file,file, start_thread = 5):
 
 if __name__ == "__main__":
     # Path to the folder that will be used to create files
+    # creates folder in the current work directory 
     path = "./stress test"
     
     # delete folder if it existed from last exe
@@ -207,7 +208,7 @@ if __name__ == "__main__":
     # Path to the file that will be read and written to 
     path_to_file = os.path.join(path, "astress.txt") 
     if not os.path.exists(path_to_file): 
-        with open(path_to_file, 'w') as file: pass # Just create an empty file 
+        with open(path_to_file, 'w') as file: pass # Just create an empty file if it doesn't exist 
     
     # Path to the result file 
     result_file = os.path.join(path, "aResults.txt") 
@@ -216,4 +217,5 @@ if __name__ == "__main__":
 
     stress_test(path, path_to_file,result_file)
 
+    print("\nStress test completed.\n")
    
