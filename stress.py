@@ -151,8 +151,6 @@ def stress_test(path, path_to_file,file, start_thread = 5):
                 content = [i for i in range(100)]
                 thread = threading.Thread(target=write_to_file, args=(path_to_file,str(content)))
                 
-                
-                
             
             elif task_choose == "read":
                 #create a tread to read from a file

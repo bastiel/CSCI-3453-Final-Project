@@ -2,6 +2,7 @@ import threading
 import time
 import os
 import random
+import shutil
 
 first_install = False
 
@@ -171,9 +172,32 @@ def time_test(path,path_to_file,file, num_treads=50):
     get_metrix(start,file)     
 
 if __name__ == "__main__":
-    path = "C:\\Users\\SPeCS\\OneDrive\Documents\\OS system call project\\benchmark test"
-    path_to_file = "C:\\Users\\SPeCS\\OneDrive\\Documents\\OS system call project\\benchmark test\\benchmark_test.txt"
-    path_results = "C:\\Users\\SPeCS\\OneDrive\\Documents\\OS system call project\\benchmark test\\aResult_time.txt"
+
+    # Path to the folder that will be used to create files
+    # creates folder in the current work directory 
+    path = "./benchmark test"
+    
+    # delete folder if it existed from last exe
+    if os.path.exists(path):
+        shutil.rmtree(path)
+        print("Previous benchmark test detected. Creating new folder now...")
+        time.sleep(2)
+
+    #create fresh folder    
+    os.makedirs(path)
+    
+    # Path to the file that will be read and written to 
+    path_to_file = os.path.join(path, "benchmark_test.txt") 
+    if not os.path.exists(path_to_file): 
+        with open(path_to_file, 'w') as file: pass # Just create an empty file if it doesn't exist 
+    
+    # Path to the result file 
+    path_results = os.path.join(path, "aResult_time.txt") 
+    if not os.path.exists(path_results): 
+        with open(path_results, 'w') as file: pass # Just create an empty file
+
+
+    
     ##RUN TIMED TEST FOR 50 THREADS##
     time_test(path,path_to_file, path_results)
             
